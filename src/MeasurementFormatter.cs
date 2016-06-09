@@ -29,10 +29,11 @@ namespace DataMeter
     public static class MeasurementFormatter
     {
         /// <summary>
-        /// 
+        /// Converts the specified number of bytes into a formatted string appended with the
+        /// size's measurement - B for bytes, KB for kilobytes and MB for megabytes.
         /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
+        /// <param name="bytes">the size in bytes to convert</param>
+        /// <returns>A formatted string containing containg the converted amount.</returns>
         public static string Format(double bytes)
         {
             double result;
@@ -44,13 +45,14 @@ namespace DataMeter
             }
             else if (bytes < 1048576) // 1MB
             {
+                // converting to kilobytes
                 result = bytes / 1024;
                 str = String.Format("{0:F}", result);
                 return str + " KB";
             }
-            //else if (bytes < 1024000000) // < 1GB
             else
             {
+                // converting to megabytes
                 result = bytes / 1048576;
                 str = String.Format("{0:F}", result);
                 return str + " MB";
