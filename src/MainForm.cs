@@ -70,11 +70,11 @@ namespace DataMeter
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-#if DEBUG
-            this.Show();
+//#if DEBUG
+//            this.Show();
 
-            WindowState = FormWindowState.Normal;
-#endif
+//            WindowState = FormWindowState.Normal;
+//#endif
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -89,6 +89,10 @@ namespace DataMeter
 
                 nicName = app.Default.NIC;
 
+                // find the index for the nic the program has been configured to use.
+                // if nicIndex is -1, then the nic can't be found, so prompt
+                // the user to select another. This will always happen when the 
+                // program is first used. 
                 for (int i = 0; i < nics.Length; i++)
                 {
                     if (nics[i].Description == nicName)
@@ -99,6 +103,7 @@ namespace DataMeter
 
                 if (nicIndex == -1)
                 {
+                    // No nic selected - prompt the user to select one.
                     DialogResult dr;
 
                     dr = MessageBox.Show(Strings.MissingNICPrompt, Strings.MissingNICPromptTitle,
@@ -134,6 +139,10 @@ namespace DataMeter
                 cfgDialog.Show();
         }
 
+        /// <summary>
+        /// Gets or sets the value representing the selected index of the combo box
+        /// that displays all available NICs.
+        /// </summary>
         public int SelectedNIC
         {
             get
@@ -146,6 +155,9 @@ namespace DataMeter
             }
         }
 
+        /// <summary>
+        /// Gets an array of available NIC's in the host machine.
+        /// </summary>
         public NetworkInterface[] AvailableNICs
         {
             get
@@ -158,23 +170,24 @@ namespace DataMeter
         {
             if (nicIndex != -1)
             {
-                string uploadedData = Convert.ToString(
-                    nics[nicIndex].GetIPv4Statistics().BytesSent
-                    );
+//                string uploadedData = Convert.ToString(
+//                    nics[nicIndex].GetIPv4Statistics().BytesSent
+//                    );
 
-                string downloadedData = Convert.ToString(
-                    nics[nicIndex].GetIPv4Statistics().BytesReceived
-                    );
-#if DEBUG
-                uploadCount.Text = uploadedData;
-                downloadCount.Text = downloadedData;
-#endif
+//                string downloadedData = Convert.ToString(
+//                    nics[nicIndex].GetIPv4Statistics().BytesReceived
+//                    );
+//#if DEBUG
+//                uploadCount.Text = uploadedData;
+//                downloadCount.Text = downloadedData;
+//#endif
 
                 string uploadText = MeasurementFormatter.Format(
-                    nics[0].GetIPv4Statistics().BytesSent);
+                    nics[nicIndex].GetIPv4Statistics().BytesSent);
                 string downloadText = MeasurementFormatter.Format(
-                    nics[0].GetIPv4Statistics().BytesReceived);
-
+                    nics[nicIndex].GetIPv4Statistics().BytesReceived);
+                
+                // display the upload and download amounts in a tooltip.
                 notifyIcon.Text = String.Format("Upload: {0} Download: {1}", uploadText, downloadText);
             }
             else
